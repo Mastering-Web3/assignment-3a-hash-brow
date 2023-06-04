@@ -13,7 +13,7 @@
     {
       "name": "Bonus Test",
       "setup": "npm install",
-      "run": "npx hardtest test/TicketSaleTest2.js",
+      "run": "npx hardhat test/TicketSaleTest2.js",
       "input": "",
       "output": "",
       "comparison": "included",
