@@ -85,5 +85,6 @@ contract TicketSale {
     
     function withdraw() public {
         require(msg.sender == owner, "Only owner can withdraw!");
+		owner.transfer(this.funds);
     }
 }
