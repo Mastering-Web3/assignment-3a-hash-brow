@@ -5,9 +5,9 @@ contract TicketSale {
     uint16 public numTickets;
     uint256 public basePrice;
     address public owner;
+	address payable ownerAcc;
 	uint16 public sold;
 	bool onOffer;
-	uint256 public funds;
 
     struct Offer {
         address offerer;
@@ -29,9 +29,9 @@ contract TicketSale {
         numTickets = _numTickets;
 		basePrice = _basePrice;
 		owner = msg.sender;
+		ownerAcc = payable(msg.sender);
 		sold = 0;
 		onOffer = false;
-		funds = 0;
     }
 
     function validate(address person) public view returns (bool) {
@@ -48,7 +48,6 @@ contract TicketSale {
 
 		sold += 1;
 		buyers[potentialBuyer] = Buyer({hasTicket: true, ticketId: sold, price: basePrice});
-		funds += basePrice;
     }
 
     function getTicketOf(address person) public view returns (uint16) {
@@ -76,8 +75,6 @@ contract TicketSale {
         require(msg.value == offer.price, "Pay the valid price offered!");
 		require(ticketId == offer.id, "The ticket is not under offer!");
 
-		funds -= buyers[offer.offerer].price - offer.price;
-
 		onOffer = false;
 		buyers[offer.offerer] = Buyer({hasTicket: false, ticketId: 0, price: 0});
 		buyers[msg.sender] = Buyer({hasTicket: true, ticketId: ticketId, price: offer.price});
@@ -85,5 +82,6 @@ contract TicketSale {
     
     function withdraw() public {
         require(msg.sender == owner, "Only owner can withdraw!");
+		ownerAcc.transfer(address(this).balance);
     }
 }
