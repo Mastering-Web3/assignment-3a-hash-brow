@@ -7,7 +7,7 @@ contract TicketSale {
     address public owner;
 	uint16 public sold;
 	bool onOffer;
-	uint256 funds;
+	uint256 public funds;
 
     struct Offer {
         address offerer;
@@ -85,6 +85,5 @@ contract TicketSale {
     
     function withdraw() public {
         require(msg.sender == owner, "Only owner can withdraw!");
-		owner.transfer(this.funds);
     }
 }
